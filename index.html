@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <title>NernstCalc</title>
+  <meta name="description" content="Equilibrium Potential Calculator for Electrophysiology" />
+  <link rel="shortcut icon" href="./graphics/favicon-180.png">
+  <link rel="apple-touch-icon" href="./graphics/favicon-180.png">
+  <link rel="shortcut icon" href="./graphics/favicon-32.png">
+
+  <script>
+    function Update() {
+
+      var eqTitle = document.getElementById("eqTitle");
+      var ion = document.getElementById("ion").value;
+      var z = parseInt(document.getElementById("charge").value);
+      var inside = parseFloat(document.getElementById("inside").value);
+      var outside = parseFloat(document.getElementById("outside").value);
+      var tempC = parseFloat(document.getElementById("temperature").value);
+      var tempF = tempC * 9 / 5 + 32;
+      var tempK = tempC + 273.15;
+      var R = 8.31446261815324;
+      var F = 96485.33212;
+      var E = (R * tempK) / (z * F) * Math.log(outside / inside);
+      var Emv = E * 1e3;
+
+      if (isFinite(Emv)) {
+        eqTitle.innerHTML = `E<sub>${ion}</sub> = ${Emv.toFixed(2)} mV`;
+
+        var actionAbove = (z < 0) ? `inhibitory` : `excitatory`;
+        var actionBelow = (z < 0) ? `excitatory` : `inhibitory`;
+        document.getElementById("messageAt").innerHTML = `At E<sub>${ion}</sub> ${ion} channels do not pass current.`;
+        document.getElementById("messageAbove").innerHTML = `Above E<sub>${ion}</sub> opening ${ion} channels is ${actionAbove}.`;
+        document.getElementById("messageBelow").innerHTML = `Below E<sub>${ion}</sub> opening ${ion} channels is ${actionBelow}.`;
+        document.getElementById("tempDetails").innerHTML = `${tempC}C / ${tempF}F / ${tempK.toFixed(0)}K`;
+        //25C / 300K / 75F 
+      } else {
+        eqTitle.innerHTML = `ERROR`;
+      }
+
+    }
+  </script>
+
+</head>
+
+<body class="bg-light" onload="Update()">
+
+  <div style="max-width: 800px; margin: auto;">
+
+    <div class="container bg-white shadow mx-auto p-0 pb-4">
+
+      <header class="p-3" style="background-color: #003366; color: white;">
+        <div class="display-3"><strong>NernstCalc</strong></div>
+        <div><em>Equilibrium Potential Calculator for Electrophysiology</em></div>
+      </header>
+
+      <article class="p-0 m-3">
+
+        <div class="row text-nowrap align-items-top align">
+
+          <div class="col-sm inline-block mt-3">
+            <label>
+              <strong>Ion</strong>
+              <input class="form-control" value="Cl" id="ion" oninput="Update()" />
+            </label>
+          </div>
+
+          <div class="col-sm inline-block mt-3">
+            <label>
+              <strong>Charge</strong>
+              <input class="form-control" value="-1" id="charge" oninput="Update()" />
+            </label>
+          </div>
+
+          <div class="col-sm inline-block mt-3">
+            <label>
+              <strong>[Cl]<sub>in</sub></strong>
+              <input class="form-control" value="11" id="inside" oninput="Update()" />
+            </label>
+            <div class="text-muted">
+              <small>mM</small>
+            </div>
+          </div>
+
+          <div class="col-sm inline-block mt-3">
+            <label>
+              <strong>[Cl]<sub>out</sub></strong>
+              <input class="form-control" value="168" id="outside" oninput="Update()" />
+            </label>
+            <div class="text-muted">
+              <small>mM</small>
+            </div>
+          </div>
+
+          <div class="col-sm inline-block mt-3">
+            <label>
+              <strong>Temperature</strong>
+              <input class="form-control" value="25" id="temperature" oninput="Update()" />
+            </label>
+            <div class="text-muted">
+              <small id="tempDetails">...</small>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="container text-center mt-4 mb-5">
+          <div class="p-3 bg-light rounded border display-4 d-inline-block">
+            <strong id="eqTitle">
+              E<sub>Cl</sub> = -75.45 mV
+            </strong>
+          </div>
+        </div>
+
+        <section id="messages" class="text-center">
+          <div class="mt-2">
+            <span id="messageAt">...</span>
+          </div>
+
+          <div class="mt-2">
+            <span id="messageAbove">...</span>
+          </div>
+
+          <div class="mt-2">
+            <span id="messageBelow">...</span>
+          </div>
+        </section>
+
+        <hr class="m-5 invisible">
+
+        <h1 class="display-6"><strong>The Nernst Equation</strong></h1>
+
+        <div class="">
+          The Nernst equation can be used to calculate the equilibrium potential (the Nernst potential) for an ion
+          based on its charge (valence) and its concentration on each side of a membrane.
+          This potential is determined using the concentration of the ion both inside and outside the membrane.
+        </div>
+
+        <div class="text-center m-5">
+          <a href="graphics/nernst-equation.png">
+            <img src="graphics/nernst-equation.png" class="img-fluid" />
+          </a>
+        </div>
+
+        <div class="">
+          When the membrane is in thermodynamic equilibrium (i.e., no net flux of ions), and if the cell is permeable to
+          only one ion, then the membrane potential must be equal to the Nernst potential for that ion.
+        </div>
+
+        <div class="text-center m-5">
+          <a href="graphics/nernst-equation-explained.jpg">
+            <img src="graphics/nernst-equation-explained.jpg" class="img-fluid" />
+          </a>
+        </div>
+
+        <hr class="m-5 invisible">
+
+        <h1 class="display-4 mt-5"><strong>References</strong></h1>
+
+        <ul>
+
+          <li class="m-3">Alex Yartsev. <a
+              href="https://derangedphysiology.com/main/cicm-primary-exam/required-reading/cellular-physiology/Chapter%20118/mechanisms-responsible-cell-resting-membrane-potential">Mechanisms
+              responsible for the cell resting membrane potential</a>
+          </li>
+
+          <li class="m-3">Wright SH. Generation of resting membrane potential.
+            Adv Physiol Educ 28: 139–142, 2004;
+            doi:
+            <a href="https://journals.physiology.org/doi/pdf/10.1152/advan.00029.2004">10.1152/advan.00029.2004.</a>
+          </li>
+
+          <li class="m-3">Physiology Web
+            <a href="https://www.physiologyweb.com/calculators/nernst_potential_calculator.html">
+              Nernst Potential Calculator</a>
+          </li>
+
+          <li class="m-3">
+            <a href="https://github.com/swharden/NernstCalc">NernstCalc on GitHub</a>
+          </li>
+
+        </ul>
+      </article>
+
+    </div>
+
+</body>
+
+</html>
