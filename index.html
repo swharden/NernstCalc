@@ -46,6 +46,8 @@
         document.getElementById("messageAbove").innerHTML = `Above E<sub>${ion}</sub> opening ${ion} channels is ${actionAbove}.`;
         document.getElementById("messageBelow").innerHTML = `Below E<sub>${ion}</sub> opening ${ion} channels is ${actionBelow}.`;
         document.getElementById("tempDetails").innerHTML = `${tempC}C / ${tempF}F / ${tempK.toFixed(0)}K`;
+        document.getElementById("ionNameInside").innerHTML = ion;
+        document.getElementById("ionNameOutside").innerHTML = ion;
         //25C / 300K / 75F 
       } else {
         eqTitle.innerHTML = `ERROR`;
@@ -87,7 +89,7 @@
 
           <div class="col-sm inline-block mt-3">
             <label>
-              <strong>[Cl]<sub>in</sub></strong>
+              <strong>[<span id="ionNameInside">Cl</span>]<sub>in</sub></strong>
               <input class="form-control" value="11" id="inside" oninput="Update()" />
             </label>
             <div class="text-muted">
@@ -97,7 +99,7 @@
 
           <div class="col-sm inline-block mt-3">
             <label>
-              <strong>[Cl]<sub>out</sub></strong>
+              <strong>[<span id="ionNameOutside">Cl</span>]<sub>out</sub></strong>
               <input class="form-control" value="168" id="outside" oninput="Update()" />
             </label>
             <div class="text-muted">
