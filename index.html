@@ -40,11 +40,9 @@
       if (isFinite(Emv)) {
         eqTitle.innerHTML = `E<sub>${ion}</sub> = ${Emv.toFixed(2)} mV`;
 
-        var actionAbove = (z < 0) ? `inhibitory` : `excitatory`;
-        var actionBelow = (z < 0) ? `excitatory` : `inhibitory`;
-        document.getElementById("messageAt").innerHTML = `At E<sub>${ion}</sub> ${ion} channels do not pass current.`;
-        document.getElementById("messageAbove").innerHTML = `Above E<sub>${ion}</sub> opening ${ion} channels is ${actionAbove}.`;
-        document.getElementById("messageBelow").innerHTML = `Below E<sub>${ion}</sub> opening ${ion} channels is ${actionBelow}.`;
+        document.getElementById("messageAt").innerHTML = `When V<sub>m</sub> equals E<sub>${ion}</sub>, ${ion} channels do not pass current.`;
+        document.getElementById("messageAbove").innerHTML = `If V<sub>m</sub> is above E<sub>${ion}</sub>, opening ${ion} channels is inhibitory.`;
+        document.getElementById("messageBelow").innerHTML = `If V<sub>m</sub> is below E<sub>${ion}</sub>, opening ${ion} channels is excitatory.`;
         document.getElementById("tempDetails").innerHTML = `${tempC}C / ${tempF}F / ${tempK.toFixed(0)}K`;
         document.getElementById("ionNameInside").innerHTML = ion;
         document.getElementById("ionNameOutside").innerHTML = ion;
