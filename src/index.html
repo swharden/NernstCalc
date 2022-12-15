@@ -50,9 +50,10 @@
       if (isFinite(Emv)) {
         eqTitle.innerHTML = `E<sub>${ion}</sub> = ${Emv.toFixed(2)} mV`;
 
-        document.getElementById("messageAt").innerHTML = `When V<sub>m</sub> equals E<sub>${ion}</sub>, ${ion} channels do not pass current.`;
-        document.getElementById("messageAbove").innerHTML = `If V<sub>m</sub> is above E<sub>${ion}</sub>, opening ${ion} channels is inhibitory.`;
-        document.getElementById("messageBelow").innerHTML = `If V<sub>m</sub> is below E<sub>${ion}</sub>, opening ${ion} channels is excitatory.`;
+        document.getElementById("messagePre").innerHTML = ''; //`How do ${ion} channels affect membrane voltage?`;
+        document.getElementById("messageAt").innerHTML = `If V<sub>m</sub> = E<sub>${ion}</sub>, ${ion} channels do not pass current`;
+        document.getElementById("messageAbove").innerHTML = `When V<sub>m</sub> > E<sub>${ion}</sub>, ${ion} channels are inhibitory`;
+        document.getElementById("messageBelow").innerHTML = `When V<sub>m</sub> < E<sub>${ion}</sub>, ${ion} channels are excitatory`;
         document.getElementById("tempDetails").innerHTML = `${tempC}C / ${tempF}F / ${tempK.toFixed(0)}K`;
         document.getElementById("ionNameInside").innerHTML = ion;
         document.getElementById("ionNameOutside").innerHTML = ion;
@@ -66,145 +67,141 @@
 
 </head>
 
-<body class="bg-light" onload="Update()">
+<body onload="Update()">
 
-  <div style="max-width: 800px; margin: auto;">
+  <div class="container" style="max-width: 800px;">
 
-    <div class="container bg-white shadow mx-auto p-0 pb-4">
+    <header class="p-3 rounded mt-4 mb-3" style="background-color: #003366; color: white;">
+      <div class="display-3"><strong>NernstCalc</strong></div>
+      <div><em>Equilibrium Potential Calculator for Electrophysiology</em></div>
+    </header>
 
-      <header class="p-3" style="background-color: #003366; color: white;">
-        <div class="display-3"><strong>NernstCalc</strong></div>
-        <div><em>Equilibrium Potential Calculator for Electrophysiology</em></div>
-      </header>
+    <section id="calculator_stuff" class="px-3">
+      <div class="row text-nowrap align-items-top align">
 
-      <article class="p-0 m-3">
-
-        <div class="row text-nowrap align-items-top align">
-
-          <div class="col-sm inline-block mt-3">
-            <label>
-              <strong>Ion</strong>
-              <input class="form-control" value="Cl" id="ion" oninput="Update()" />
-            </label>
-          </div>
-
-          <div class="col-sm inline-block mt-3">
-            <label>
-              <strong>Charge</strong>
-              <input class="form-control" value="-1" id="charge" oninput="Update()" />
-            </label>
-          </div>
-
-          <div class="col-sm inline-block mt-3">
-            <label>
-              <strong>[<span id="ionNameInside">Cl</span>]<sub>in</sub></strong>
-              <input class="form-control" value="11" id="inside" oninput="Update()" />
-            </label>
-            <div class="text-muted">
-              <small>mM</small>
-            </div>
-          </div>
-
-          <div class="col-sm inline-block mt-3">
-            <label>
-              <strong>[<span id="ionNameOutside">Cl</span>]<sub>out</sub></strong>
-              <input class="form-control" value="168" id="outside" oninput="Update()" />
-            </label>
-            <div class="text-muted">
-              <small>mM</small>
-            </div>
-          </div>
-
-          <div class="col-sm inline-block mt-3">
-            <label>
-              <strong>Temperature</strong>
-              <input class="form-control" value="25" id="temperature" oninput="Update()" />
-            </label>
-            <div class="text-muted">
-              <small id="tempDetails">...</small>
-            </div>
-          </div>
-
+        <div class="col-sm inline-block mt-3">
+          <label>
+            <strong>Ion</strong>
+            <input class="form-control" value="Cl" id="ion" oninput="Update()" />
+          </label>
         </div>
 
-        <div class="container text-center mt-4 mb-5">
-          <div class="p-3 bg-light rounded border display-4 d-inline-block">
-            <strong id="eqTitle">
-              E<sub>Cl</sub> = -75.45 mV
-            </strong>
+        <div class="col-sm inline-block mt-3">
+          <label>
+            <strong>Charge</strong>
+            <input class="form-control" value="-1" id="charge" oninput="Update()" />
+          </label>
+        </div>
+
+        <div class="col-sm inline-block mt-3">
+          <label>
+            <strong>[<span id="ionNameInside">Cl</span>]<sub>in</sub></strong>
+            <input class="form-control" value="11" id="inside" oninput="Update()" />
+          </label>
+          <div class="text-muted">
+            <small>mM</small>
           </div>
         </div>
 
-        <section id="messages" class="text-center">
-          <div class="mt-2">
-            <span id="messageAt">...</span>
+        <div class="col-sm inline-block mt-3">
+          <label>
+            <strong>[<span id="ionNameOutside">Cl</span>]<sub>out</sub></strong>
+            <input class="form-control" value="168" id="outside" oninput="Update()" />
+          </label>
+          <div class="text-muted">
+            <small>mM</small>
           </div>
+        </div>
 
-          <div class="mt-2">
-            <span id="messageAbove">...</span>
+        <div class="col-sm inline-block mt-3">
+          <label>
+            <strong>Temperature</strong>
+            <input class="form-control" value="25" id="temperature" oninput="Update()" />
+          </label>
+          <div class="text-muted">
+            <small id="tempDetails">...</small>
           </div>
-
-          <div class="mt-2">
-            <span id="messageBelow">...</span>
-          </div>
-        </section>
-
-        <hr class="m-5 invisible">
-
-        <h1 class="display-6"><strong>The Nernst Equation</strong></h1>
-
-        <div class="">
-          The Nernst equation can be used to calculate the equilibrium potential for an ion
-          based on its charge (valence) and its concentration on each side of a membrane.
-          This voltage is often referred to as the Nernst potential or the reversal potential.
-          This potential is determined using the concentration of the ion both inside and outside the membrane.
         </div>
 
-        <div class="text-center m-5">
-          <a href="images/nernst-equation.png">
-            <img src="images/nernst-equation.png" class="img-fluid" />
-          </a>
+      </div>
+
+      <div class="container text-center mt-5 mb-5">
+        <div class="p-3 bg-light rounded border display-4 d-inline-block">
+          <strong id="eqTitle">
+            E<sub>Cl</sub> = -75.45 mV
+          </strong>
         </div>
+      </div>
 
-        <div class="">
-          When the membrane is in thermodynamic equilibrium (i.e., no net flux of ions), and if the cell is permeable to
-          only one ion, then the membrane potential must be equal to the Nernst potential for that ion.
+      <div id="messages" class="text-center text-muted">
+        <div class="mt-2">
+          <span id="messagePre">...</span>
         </div>
-
-        <div class="text-center m-5">
-          <a href="images/nernst-equation-explained.jpg">
-            <img src="images/nernst-equation-explained.jpg" class="img-fluid" />
-          </a>
+        <div class="mt-2">
+          <span id="messageAt">...</span>
         </div>
+        <div class="mt-2">
+          <span id="messageAbove">...</span>
+        </div>
+        <div class="mt-2">
+          <span id="messageBelow">...</span>
+        </div>
+      </div>
+    </section>
 
-        <hr class="m-5 invisible">
 
-        <h1 class="display-4 mt-5"><strong>References</strong></h1>
+    <article class="p-0 m-3">
 
-        <ul>
+      <hr class="my-5">
 
-          <li class="m-3">Alex Yartsev. <a
-              href="https://derangedphysiology.com/main/cicm-primary-exam/required-reading/cellular-physiology/Chapter%20118/mechanisms-responsible-cell-resting-membrane-potential">Mechanisms
-              responsible for the cell resting membrane potential</a>
-          </li>
+      <h1 class="fw-semibold">The Nernst Equation</h1>
 
-          <li class="m-3">Wright SH. Generation of resting membrane potential.
-            Adv Physiol Educ 28: 139–142, 2004;
-            doi:
-            <a href="https://journals.physiology.org/doi/pdf/10.1152/advan.00029.2004">10.1152/advan.00029.2004.</a>
-          </li>
+      <div class="">
+        The Nernst equation can be used to calculate the equilibrium potential for an ion
+        based on its charge (valence) and its concentration on each side of a membrane.
+        This voltage is often referred to as the Nernst potential or the reversal potential.
+        This potential is determined using the concentration of the ion both inside and outside the membrane.
+      </div>
 
-          <li class="m-3">Physiology Web
-            <a href="https://www.physiologyweb.com/calculators/nernst_potential_calculator.html">
-              Nernst Potential Calculator</a>
-          </li>
+      <a href="images/nernst-equation.png">
+        <img src="images/nernst-equation.png" class="img-fluid d-block mx-auto my-5 px-2" />
+      </a>
 
-          <li class="m-3">
-            <a href="https://github.com/swharden/NernstCalc">NernstCalc on GitHub</a>
-          </li>
+      <div class="">
+        When the membrane is in thermodynamic equilibrium (i.e., no net flux of ions), and if the cell is permeable to
+        only one ion, then the membrane potential must be equal to the Nernst potential for that ion.
+      </div>
 
-        </ul>
-      </article>
+      <a href="images/nernst-equation-explained.jpg">
+        <img src="images/nernst-equation-explained.jpg" class="img-fluid d-block mx-auto my-5 px-2" />
+      </a>
+
+      <hr class="my-5">
+
+      <h1 class="fw-semibold">References</h1>
+
+      <ul class="lh-lg">
+
+        <li><a
+            href="https://derangedphysiology.com/main/cicm-primary-exam/required-reading/cellular-physiology/Chapter%20118/mechanisms-responsible-cell-resting-membrane-potential">Mechanisms
+            responsible for the cell resting membrane potential</a> by Alex Yartsev
+        </li>
+
+        <li>Wright SH. Generation of resting membrane potential.
+          Adv Physiol Educ 28: 139–142, 2004;
+          doi:
+          <a href="https://journals.physiology.org/doi/pdf/10.1152/advan.00029.2004">10.1152/advan.00029.2004.</a>
+        </li>
+
+        <li>Physiology Web
+          <a href="https://www.physiologyweb.com/calculators/nernst_potential_calculator.html">
+            Nernst Potential Calculator</a>
+        </li>
+
+      </ul>
+    </article>
+
+  </div>
 
     </div>
 
