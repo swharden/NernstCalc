@@ -6,15 +6,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   publish:
     name: Publish
@@ -25,16 +16,7 @@ jobs:
     steps:
       - name: 🛒 Checkout
         uses: actions/checkout@v3
-      - name: 🛠️ Configure Pages
-        uses: actions/configure-pages@v2
-      - name: 📦 Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: "./dev/pages"
-      - name: 🚀 Deploy GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
-      - name: 🔑 Load SSH Keys
+      - name: 🔑 Load SSH Key
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
